@@ -67,11 +67,10 @@ The test suite covers the following scenarios:
 - Responsiveness of the application on different devices and viewports
 - Accessibility checks for key elements
 - Form submission and validation for the contact form
-- Location check
 
 ### Suggested improvements
-- Make elements on the page with stable locators (e.g., data-testids or ARIA labels), which can be find easily and will not be changed often.
+- Make elements on the page with stable locators (e.g., data-testids or ARIA labels), which can be found easily and will not be changed often.
 - Add more tests for edge cases and error states to ensure comprehensive coverage.
 - Check performance metrics using Playwright's built-in capabilities or integrate with tools like Lighthouse.
-- reporting, like Monocart-report which uses more metrics and provides better insights.
+- reporting, like Monocart-report. It uses more metrics and provides better insights.
 - integration with some test management system, like JIRA X-Ray.
