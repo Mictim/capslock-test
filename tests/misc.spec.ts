@@ -19,9 +19,9 @@ test.describe('Miscellaneous Tests @misc', () => {
         };
     });
 
-    test('Validate location of CTA buttons on Main Page', async ({ app }) => {
+    test('Validate location on Main Page', async ({ app }) => {
         await app.main.open();
-        await app.main.validateLocation("Greater Poland");
+        await app.main.validateLocation(process.env.CI ? "Illinois" : "Greater Poland");
     });
 
     test('Validate slider switch by Next/Prev buttons', async ({ app }) => {
