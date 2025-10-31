@@ -41,10 +41,6 @@ jobs:
       run: npm run test
       continue-on-error: true
     
-    - name: Generate Playwright HTML Report
-      if: always()
-      run: npm run report:pw
-    
     - name: Generate Axe Report
       if: always()
       run: npm run report:axe
