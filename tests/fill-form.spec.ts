@@ -16,6 +16,11 @@ test.describe('[Sunny Day] Fill Form Tests @smoke', () => {
             await app.thankYou.expectLoaded();
         });
     }
+    test('Fill the form and validate steps numeration', async ({ app }) => {
+        await app.main.expectLoaded();
+        await app.main.validateStepsNumeration(testData[0]);
+        await app.thankYou.expectLoaded();
+    });
 });
 
 test.describe('Fill form with specific ZIP code', () => {

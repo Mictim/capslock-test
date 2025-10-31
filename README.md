@@ -18,7 +18,7 @@ Here you will find instructions how to set up and run Playwright tests for the C
 2. **Configure Playwright**
    If you need, please update the `playwright.config.ts` file to match your testing requirements. You can configure different browsers, devices, and other settings.
    Default consfiguration includes:
-   - Browsers: Desktop Chrome (HD and FullHD), Desktop Edge, Mobile Chrome (Galaxy S24), Mobile Safari (iPhone 15 Pro)
+   - Browsers: Desktop Chromium (HD and FullHD), Desktop Edge, Mobile Chrome (Galaxy S24), Mobile Safari (iPhone 15 Pro), Desktop Chrome (channel chrome)
    - Viewports: 1280x720, 1920x1080 for Desktop Chrome
    - Test directory: `tests`
    - Traces, Screenshots and videos recording on failure for CI/CD execution and always "on" for local runs.
@@ -37,18 +37,26 @@ Here you will find instructions how to set up and run Playwright tests for the C
 
    To run the specific project (browser/device), use:
    ```bash
-   npx playwright test --project="Project Name"
+   npx playwright test --project='Project Name'
    ```
 
    To run tests by tag, use:
    ```bash
    npx playwright test --grep @tagname
    ```
+   or to exclude tests by tag:
+   ```bash
+   npx playwright test --grep-invert @tagname
+   ```
 
 4. **View Test Reports**
     After running the tests, you can generate and view the HTML report by executing:
     ```bash
    npx playwright show-report
+   ```
+   or using package.json script:
+   ```bash
+   npm run report:pw
    ```
 
 ### Scenarios Covered

@@ -65,6 +65,16 @@ export const testData: {
             errorMessage: ERROR_CODES.FULL_NAME_INVALID_CHARACTERS,
             testName: 'Full name has invalid characters'
         },
+        {
+            index: 2,
+            zipCode: '53134',
+            interest: [],
+            propertyType: 'Owned',
+            name: "William-Jackson Johnson-Lee-Doppelgangerę",
+            email: 'a@a',
+            errorMessage: ERROR_CODES.TOO_LONG_NAME,
+            testName: 'Full name is too long'
+        }
     ],
     propertyTypeRequired: {
         index: 2,

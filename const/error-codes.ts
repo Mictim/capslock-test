@@ -5,6 +5,7 @@ export const ERROR_CODES = {
     TOO_SHORT_NAME: 'This value is too short. Your name should have at least 3 characters or more.',
     FULL_NAME_REQUIRED: 'Your full name should contain both first and last name.',
     FULL_NAME_INVALID_CHARACTERS: 'Your name should consist only of latin letters, apostrophes, underscores, dots and dashes.',
+    TOO_LONG_NAME: 'This value is too long. Your name should have 40 characters or less.',
     WRONG_PHONE_NUMBER: 'Wrong phone number.',
     WRONG_SORRY_EMAIL: 'Wrong email.',
     EMPTY_SORRY_EMAIL: 'Enter your email address.'

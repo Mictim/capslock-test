@@ -46,7 +46,7 @@ export class MainPage extends AppPage {
      */
     async validateLocation(expectedLocation: string): Promise<void> {
         await test.step('Check location on Main Page', async () => {
-            await expect(await this.location, 
+            await expect(await this.location,
                 { message: `Location contains expected text: ${expectedLocation}` }
             ).toContainText(expectedLocation);
         });
@@ -67,27 +67,27 @@ export class MainPage extends AppPage {
                     sectionLocator = this.sectionFalling;
                     break;
                 case 'General View':
-                    sectionLocator = this.sectionGeneralView;       
+                    sectionLocator = this.sectionGeneralView;
                     break;
                 case 'Health Block':
-                    sectionLocator = this.sectionHealthBlock;       
+                    sectionLocator = this.sectionHealthBlock;
                     break;
                 case 'Slider':
-                    sectionLocator = this.sectionSlider;       
+                    sectionLocator = this.sectionSlider;
                     break;
                 case 'Warranty':
-                    sectionLocator = this.sectionWarranty;       
+                    sectionLocator = this.sectionWarranty;
                     break;
                 case 'Form 1':
-                    sectionLocator = this.sectionForm(1);       
+                    sectionLocator = this.sectionForm(1);
                     break;
                 case 'Form 2':
-                    sectionLocator = this.sectionForm(2);       
+                    sectionLocator = this.sectionForm(2);
                     break;
                 default:
                     throw new Error(`Section ${section} is not defined on Main Page`);
             }
-            await expect.soft(await sectionLocator.count(), 
+            await expect.soft(await sectionLocator.count(),
                 { message: `Section ${section} is visible on Main Page` }
             ).toBeGreaterThan(0);
         });
@@ -103,8 +103,8 @@ export class MainPage extends AppPage {
             await this.page.waitForTimeout(2000); // wait for video to load
             const section = container === 'Hero' ? this.sectionHero : this.sectionGeneralView;
             const videoButton = section.locator('.blockVideo button.play');
-            const isButtons = await videoButton.locator('i').count() > 0 ? true : false; 
-            if(!isButtons) {
+            const isButtons = await videoButton.locator('i').count() > 0 ? true : false;
+            if (!isButtons) {
                 await videoButton.click();
             }
             const isPlaying = await videoButton.locator('i').getAttribute('class');
@@ -287,6 +287,16 @@ export class MainPage extends AppPage {
     async fillTheForm(formData: FormType): Promise<void> {
         await test.step('Fill the form on Main Page', async () => {
             await this.completeFirstStep(formData);
+            await this.completeSecondStep(formData);
+            await this.completeThirdStep(formData);
+            await this.completeFourthStep(formData);
+            await this.completeFifthStep(formData);
+        });
+    }
+
+    async validateStepsNumeration(formData: FormType): Promise<void> {
+        await test.step('Validate steps numeration on Main Page', async () => {
+            await this.completeFirstStep(formData);
             await this.validateStep(formData.index, 2);
             await this.completeSecondStep(formData);
             await this.validateStep(formData.index, 3);
@@ -299,7 +309,7 @@ export class MainPage extends AppPage {
     }
 
     async validateErrorMessage(
-        index: 1 | 2, 
+        index: 1 | 2,
         step: 1 | 2 | 3 | 4 | 5 | "sorry",
         expectMessage: string): Promise<void> {
         await test.step('Validate error message on Main Page', async () => {
@@ -313,6 +323,43 @@ export class MainPage extends AppPage {
             const form = this.stepContainer(index, "sorry");
             await expect(await form.locator(".stepTitle .fadeIn"), { message: 'Thank you message is displayed in the step sorry' })
                 .toHaveText('Thank you for your interest, we will contact you when our service becomes available in your area!');
+        });
+    }
+
+    // Methods for field type validation
+    async validateEmailFieldType(index: 1 | 2, step: 4 | "sorry"): Promise<void> {
+        await test.step('Validate email field type on Main Page', async () => {
+            const form = this.stepContainer(index, step);
+            await expect.soft(await form.locator('input[name="email"]'),
+                { message: 'Email input field has correct type attribute' })
+                .toHaveAttribute('type', 'email');
+        });
+    }
+
+    async validateZipCodeFieldType(index: 1 | 2): Promise<void> {
+        await test.step('Validate ZIP code field type on Main Page', async () => {
+            const form = this.stepContainer(index, 1);
+            await expect.soft(await form.locator('input[name="zipCode"]'),
+                { message: 'ZIP code input field has correct type attribute' })
+                .toHaveAttribute('type', 'tel');
+        });
+    }
+
+    async validateNameFieldType(index: 1 | 2, step: 4): Promise<void> {
+        await test.step('Validate name field type on Main Page', async () => {
+            const form = this.stepContainer(index, step);
+            await expect.soft(await form.locator('input[name="name"]'),
+                { message: 'Name input field has correct type attribute' })
+                .toHaveAttribute('type', 'text');
+        });
+    }
+    
+    async validatePhoneFieldType(index: 1 | 2, step: 5): Promise<void> {
+        await test.step('Validate phone number field type on Main Page', async () => {
+            const form = this.stepContainer(index, step);
+            await expect.soft(await form.locator('input[name="phone"]'),
+                { message: 'Phone number input field has correct type attribute' })
+                .toHaveAttribute('type', 'tel');
         });
     }
 }
