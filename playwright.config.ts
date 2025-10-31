@@ -30,7 +30,7 @@ export default defineConfig({
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: 'https://test-qa.capslock.global/',
-    
+    headless: true,
     actionTimeout: 10 * 1000,
     navigationTimeout: 20 * 1000,
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */

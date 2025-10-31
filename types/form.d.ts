@@ -1,4 +1,5 @@
 export interface FormType {
+    testName?: string;
     index: 1 | 2;
     zipCode?: string;
     interest?: Array<'Independence' | 'Safety' | 'Therapy' | 'Other'>;
@@ -6,4 +7,5 @@ export interface FormType {
     name?: string;
     email?: string;
     phone?: string;
+    errorMessage?: string;
 }

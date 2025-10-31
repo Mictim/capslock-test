@@ -1,6 +1,6 @@
 export const ERROR_CODES = {
     WRONG_ZIP_CODE: 'Wrong ZIP code.',
-    ENTER_ZIP_CODE: 'Enter you ZIP code.',
+    ENTER_ZIP_CODE: 'Enter your ZIP code.',
     PROPERTY_TYPE_REQUIRED: 'Choose one of the variants.',
     TOO_SHORT_NAME: 'This value is too short. Your name should have at least 3 characters or more.',
     FULL_NAME_REQUIRED: 'Your full name should contain both first and last name.',

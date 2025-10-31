@@ -120,10 +120,10 @@ export class MainPage extends AppPage {
 
     async validateStep(index: 1 | 2, expectedStep: number): Promise<void> {
         const form = this.stepContainer(index, 2);
-            await expect.soft(await this.sectionForm(index).locator('[data-form-progress-current-step]'),
-                { message: `Current form step is ${expectedStep}` }
-            ).toHaveText(expectedStep.toString());
-            await expect.soft(await form.locator('form').getAttribute("data-current-step")).toEqual(`.step-${expectedStep}`);
+        await expect.soft(await this.sectionForm(index).locator('[data-form-progress-current-step]'),
+            { message: `Current form step is ${expectedStep}` }
+        ).toHaveText(expectedStep.toString());
+        await expect.soft(await form.locator('form').getAttribute("data-current-step")).toEqual(`.step-${expectedStep}`);
     }
 
     async completeFirstStep(formData: FormType): Promise<string> {
@@ -145,7 +145,6 @@ export class MainPage extends AppPage {
     async completeSecondStep(formData: FormType): Promise<string> {
         return test.step(`[FORM SUBMIT][2nd Step] Provide interests: ${formData.email}`, async () => {
             const { index, interest } = formData;
-            await this.validateStep(index, 2);
             const form = this.stepContainer(index, 2);
             if (interest && interest.length > 0) {
                 for (const interestItem of interest) {
@@ -169,8 +168,7 @@ export class MainPage extends AppPage {
 
     async completeThirdStep(formData: FormType): Promise<string> {
         return test.step(`[FORM SUBMIT][3rd Step] Provide a Property Type: ${formData.propertyType}`, async () => {
-            const { index, propertyType } = formData;
-            await this.validateStep(index, 3);
+            const { index } = formData;
             await this.selectPropertyType(formData);
             await this.submitStep(index, 3);
             return '4';
@@ -200,7 +198,6 @@ export class MainPage extends AppPage {
     async completeFourthStep(formData: FormType): Promise<string> {
         return test.step(`[FORM SUBMIT][4th Step] Provide Name: ${formData.name}, Email: ${formData.email}`, async () => {
             const { index } = formData;
-            await this.validateStep(index, 4);
             await this.fillName(formData);
             await this.fillEmail(formData);
             await this.submitStep(index, 4);
@@ -221,7 +218,6 @@ export class MainPage extends AppPage {
     async completeFifthStep(formData: FormType): Promise<void> {
         return test.step(`[FORM SUBMIT][5th Step] Provide Phone number: ${formData.phone}`, async () => {
             const { index } = formData;
-            await this.validateStep(index, 5);
             await this.fillPhoneNumber(formData);
             await this.submitStep(index, 5);
         });
@@ -230,10 +226,24 @@ export class MainPage extends AppPage {
     async fillTheForm(formData: FormType): Promise<void> {
         await test.step('Fill the form on Main Page', async () => {
             await this.completeFirstStep(formData);
+            await this.validateStep(formData.index, 2);
             await this.completeSecondStep(formData);
+            await this.validateStep(formData.index, 3);
             await this.completeThirdStep(formData);
+            await this.validateStep(formData.index, 4);
             await this.completeFourthStep(formData);
+            await this.validateStep(formData.index, 5);
             await this.completeFifthStep(formData);
+        });
+    }
+
+    async validateErrorMessage(
+        index: 1 | 2, 
+        step: 1 | 2 | 3 | 4 | 5 | "sorry",
+        expectMessage: string): Promise<void> {
+        await test.step('Validate error message on Main Page', async () => {
+            const form = this.stepContainer(index, step);
+            await expect(await form.locator(".helpBlock div"), { message: 'Validation message is displayed as expected' }).toHaveText(expectMessage);
         });
     }
 }
