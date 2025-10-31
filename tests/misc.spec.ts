@@ -11,7 +11,7 @@ const sections = [
     "Form 2"
 ]
 
-test.describe('Miscellaneous Tests', () => {
+test.describe('Miscellaneous Tests @misc', () => {
     test('Validate sections on Main Page', async ({ app }) => {
         await app.main.open();
         for (const section of sections) {

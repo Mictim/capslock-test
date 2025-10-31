@@ -3,7 +3,7 @@ import { test } from "../fixtures/fixture";
 import { testData } from "../resources/errors";
 
 
-test.describe('Fill form. Negative Tests', () => {
+test.describe('Fill form. Negative Tests @negative', () => {
     for(const data of testData.zip) {
         test(`Validate ${data.testName}`, async ({ app }) => {
             await app.main.open();
