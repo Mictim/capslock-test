@@ -7,6 +7,7 @@ const videoPlaybackSections: Array<'Hero' | 'General View'> = [
 
 test.use({
     channel: 'chrome',
+    video: "on"
 })
 
 // Tests for video playback functionality can be executed only with enterprise browser channels.
