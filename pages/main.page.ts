@@ -36,7 +36,7 @@ export class MainPage extends AppPage {
      */
     async expectLoaded(message?: string): Promise<void> {
         await test.step('Expect Main Page to be loaded', async () => {
-            await expect(await this.page, { message: message ?? 'Main Page is not loaded' }).toHaveTitle(/Caps Lock/);
+            await expect(await this.page, { message: message ?? 'Main Page is loaded' }).toHaveTitle(/Caps Lock/);
         });
     }
 
@@ -46,7 +46,50 @@ export class MainPage extends AppPage {
      */
     async validateLocation(expectedLocation: string): Promise<void> {
         await test.step('Check location on Main Page', async () => {
-            await expect(this.location).toContainText(expectedLocation);
+            await expect(await this.location, 
+                { message: `Location contains expected text: ${expectedLocation}` }
+            ).toContainText(expectedLocation);
+        });
+    }
+
+    /**
+     * Method which is validating section header and subheader on Main Page
+     * @param section Expected section
+     */
+    async validateSectionOnPage(section: string): Promise<void> {
+        await test.step(`Validate ${section} section on Main Page`, async () => {
+            let sectionLocator;
+            switch (section) {
+                case 'Hero':
+                    sectionLocator = this.sectionHero;
+                    break;
+                case 'Falling':
+                    sectionLocator = this.sectionFalling;
+                    break;
+                case 'General View':
+                    sectionLocator = this.sectionGeneralView;       
+                    break;
+                case 'Health Block':
+                    sectionLocator = this.sectionHealthBlock;       
+                    break;
+                case 'Slider':
+                    sectionLocator = this.sectionSlider;       
+                    break;
+                case 'Warranty':
+                    sectionLocator = this.sectionWarranty;       
+                    break;
+                case 'Form 1':
+                    sectionLocator = this.sectionForm(1);       
+                    break;
+                case 'Form 2':
+                    sectionLocator = this.sectionForm(2);       
+                    break;
+                default:
+                    throw new Error(`Section ${section} is not defined on Main Page`);
+            }
+            await expect.soft(await sectionLocator.count(), 
+                { message: `Section ${section} is visible on Main Page` }
+            ).toBeGreaterThan(0);
         });
     }
 
@@ -57,8 +100,13 @@ export class MainPage extends AppPage {
      */
     async validateVideoPlayback(container: 'Hero' | 'General View', action: 'play' | 'pause'): Promise<void> {
         await test.step(`${container} video ${action} on Main Page`, async () => {
+            await this.page.waitForTimeout(2000); // wait for video to load
             const section = container === 'Hero' ? this.sectionHero : this.sectionGeneralView;
             const videoButton = section.locator('.blockVideo button.play');
+            const isButtons = await videoButton.locator('i').count() > 0 ? true : false; 
+            if(!isButtons) {
+                await videoButton.click();
+            }
             const isPlaying = await videoButton.locator('i').getAttribute('class');
             if (isPlaying?.includes('lavin-pause') && action === 'play') {
                 await videoButton.click();
@@ -68,6 +116,7 @@ export class MainPage extends AppPage {
                 await videoButton.click();
                 await expect(videoButton.locator('i')).toHaveClass(/lavin-pause/);
             }
+            await this.page.waitForTimeout(3000); // wait for video state to stabilize
         });
     }
 
@@ -97,12 +146,14 @@ export class MainPage extends AppPage {
      */
     async validateSliderItemsSwitchByBottomImages(index: number): Promise<void> {
         await test.step('Check slider items switching by bottom images on Main Page', async () => {
-            await expect(index, { message: 'Invalid bottom image index, it should be greater than or equal to 0' })
+            await expect(index, { message: 'Bottom image index, it should be greater than or equal to 0' })
                 .toBeGreaterThanOrEqual(0);
-            await expect(index, { message: 'Invalid bottom image index, it should be less than the number of visible images' })
+            await expect(index, { message: 'Bottom image index, it should be less than the number of visible images' })
                 .toBeLessThan(await this.sliderBottomVisibleImages.count());
             const bottomImage = this.sliderBottomVisibleImages.nth(index);
-            await bottomImage.click();
+            await bottomImage.scrollIntoViewIfNeeded();
+            await this.page.waitForTimeout(3000);
+            await bottomImage.click({ force: true });
             const newImage = await this.sliderImage.getAttribute('src');
             const expectedImage = await this.sliderBottomCurrentImage.getAttribute('src');
             await expect(newImage, { message: 'Slider image did not change as expected' }).toEqual(expectedImage);
