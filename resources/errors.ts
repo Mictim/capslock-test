@@ -6,6 +6,7 @@ export const testData: {
     propertyTypeRequired: FormType;
     user: FormType[];
     wrongPhoneNumber: FormType;
+    sorryEmail: FormType[];
 } = {
     zip: [
         {
@@ -81,5 +82,28 @@ export const testData: {
         email: 'john.doe@example.com',
         phone: '12345678',
         errorMessage: ERROR_CODES.WRONG_PHONE_NUMBER
-    }
+    },
+    sorryEmail: [
+        {
+            index: 1,
+            zipCode: '11111',
+            email: 'invalid-email',
+            errorMessage: ERROR_CODES.WRONG_SORRY_EMAIL,
+            testName: 'Invalid sorry email format'
+        },
+        {
+            index: 1,
+            zipCode: '11111',
+            email: '',
+            errorMessage: ERROR_CODES.EMPTY_SORRY_EMAIL,
+            testName: 'Empty sorry email'
+        },
+        {
+            index: 1,
+            zipCode: '11111',
+            email: 'a@b',
+            errorMessage: ERROR_CODES.WRONG_SORRY_EMAIL,
+            testName: 'Invalid sorry email domain format'
+        }
+    ]
 };

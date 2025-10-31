@@ -51,5 +51,40 @@ test.describe('Fill form. Negative Tests', () => {
             );
         });
     }
+
+    test('Validate phone number error', async ({ app }) => {
+        await app.main.open();
+        await app.main.completeFirstStep(testData.wrongPhoneNumber);
+        await app.main.completeSecondStep(testData.wrongPhoneNumber);
+        await app.main.completeThirdStep(testData.wrongPhoneNumber);
+        await app.main.completeFourthStep(testData.wrongPhoneNumber);
+        await app.main.fillPhoneNumber(testData.wrongPhoneNumber);
+        await app.main.submitStep(
+            testData.wrongPhoneNumber.index,
+            5
+        );
+        await app.main.validateErrorMessage(
+            testData.wrongPhoneNumber.index,
+            5,
+            testData.wrongPhoneNumber.errorMessage!
+        );
+    });
+
+    for(const data of testData.sorryEmail) {
+        test(`Validate ${data.testName}`, async ({ app }) => {
+            await app.main.open();
+            await app.main.completeFirstStep(data);
+            await app.main.fillSorryEmail(data);
+            await app.main.submitStep(
+                data.index,
+                'sorry'
+            );
+            await app.main.validateErrorMessage(
+                data.index,
+                'sorry',
+                data.errorMessage!
+            );
+        });
+    }
         
 });

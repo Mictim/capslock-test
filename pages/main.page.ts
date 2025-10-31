@@ -4,31 +4,31 @@ import { FormType } from "../types/form";
 
 export class MainPage extends AppPage {
     public pagePath = '/';
-    public location = this.page.locator('.locationCityAndState');
+    private location = this.page.locator('.locationCityAndState');
     // Section hero elements
-    public sectionHero = this.page.locator('section div.hero');
+    private sectionHero = this.page.locator('section div.hero');
     // Section falling elements
-    public sectionFalling = this.page.locator('section div.falling');
+    private sectionFalling = this.page.locator('section div.falling');
     // Section general view elements
-    public sectionGeneralView = this.page.locator('section div.generalView');
+    private sectionGeneralView = this.page.locator('section div.generalView');
     // Section health block elements
-    public sectionHealthBlock = this.page.locator('section div.healthBlock');
+    private sectionHealthBlock = this.page.locator('section div.healthBlock');
     // Section slider elements
-    public sectionSlider = this.page.locator('section div.sliderTheme_blue');
-    public sliderTopContainer = this.sectionSlider.locator('.sliderDefault');
-    public sliderBottomContainer = this.sectionSlider.locator('.sliderPrev');
-    public sliderPrevButton = this.sliderTopContainer.locator('button.slick-prev');
-    public sliderNextButton = this.sliderTopContainer.locator('button.slick-next');
-    public sliderImage = this.sliderTopContainer.locator('.slick-list .slick-current img');
-    public sliderBottomImages = this.sliderBottomContainer.locator('.slick-list');
-    public sliderBottomVisibleImages = this.sliderBottomImages.locator('.slick-active img');
-    public sliderBottomCurrentImage = this.sliderBottomImages.locator('.slick-current img');
+    private sectionSlider = this.page.locator('section div.sliderTheme_blue');
+    private sliderTopContainer = this.sectionSlider.locator('.sliderDefault');
+    private sliderBottomContainer = this.sectionSlider.locator('.sliderPrev');
+    private sliderPrevButton = this.sliderTopContainer.locator('button.slick-prev');
+    private sliderNextButton = this.sliderTopContainer.locator('button.slick-next');
+    private sliderImage = this.sliderTopContainer.locator('.slick-list .slick-current img');
+    private sliderBottomImages = this.sliderBottomContainer.locator('.slick-list');
+    private sliderBottomVisibleImages = this.sliderBottomImages.locator('.slick-active img');
+    private sliderBottomCurrentImage = this.sliderBottomImages.locator('.slick-current img');
     // Section warranty elements
-    public sectionWarranty = this.page.locator('section div.warranty');
+    private sectionWarranty = this.page.locator('section div.warranty');
     // Section form elements
-    public sectionForm = (index: 1 | 2) => this.page.locator('section.section_form').locator(`#form-container-${index}`);
-    public stepContainer = (index: 1 | 2, step: 1 | 2 | 3 | 4 | 5 | 'sorry') => this.sectionForm(index).locator(`div.step-${step}`);
-
+    private sectionForm = (index: 1 | 2) => this.page.locator('section.section_form').locator(`#form-container-${index}`);
+    private stepContainer = (index: 1 | 2, step: 1 | 2 | 3 | 4 | 5 | 'sorry') => this.sectionForm(index).locator(`div.step-${step}`);
+    private sorryEmailInput = (index: 1 | 2) => this.sectionForm(index).locator('div.step-sorry').locator('input[data-email-input]');
 
     /**
      * Method which verifies that Main Page is loaded
@@ -169,7 +169,7 @@ export class MainPage extends AppPage {
         });
     }
 
-    async validateStep(index: 1 | 2, expectedStep: number): Promise<void> {
+    async validateStep(index: 1 | 2, expectedStep: 2 | 3 | 4 | 5 | "sorry"): Promise<void> {
         const form = this.stepContainer(index, 2);
         await expect.soft(await this.sectionForm(index).locator('[data-form-progress-current-step]'),
             { message: `Current form step is ${expectedStep}` }
@@ -246,6 +246,16 @@ export class MainPage extends AppPage {
         });
     }
 
+    async fillSorryEmail(formData: FormType): Promise<void> {
+        await test.step(`Fill sorry email: ${formData.email}`, async () => {
+            const { index, email } = formData;
+            const emailInput = this.sorryEmailInput(index);
+            if (email) {
+                await emailInput.fill(email);
+            }
+        });
+    }
+
     async completeFourthStep(formData: FormType): Promise<string> {
         return test.step(`[FORM SUBMIT][4th Step] Provide Name: ${formData.name}, Email: ${formData.email}`, async () => {
             const { index } = formData;
@@ -295,6 +305,14 @@ export class MainPage extends AppPage {
         await test.step('Validate error message on Main Page', async () => {
             const form = this.stepContainer(index, step);
             await expect(await form.locator(".helpBlock div"), { message: 'Validation message is displayed as expected' }).toHaveText(expectMessage);
+        });
+    }
+
+    async validateStepSorryThankYouMessage(index: 1 | 2) {
+        await test.step('Validate "Sorry" thank you message on Main Page', async () => {
+            const form = this.stepContainer(index, "sorry");
+            await expect(await form.locator(".stepTitle .fadeIn"), { message: 'Thank you message is displayed in the step sorry' })
+                .toHaveText('Thank you for your interest, we will contact you when our service becomes available in your area!');
         });
     }
 }
