@@ -6,7 +6,7 @@ import { testData } from "../resources/errors";
 test.describe('Fill form. Negative Tests @negative', () => {
     for(const data of testData.zip) {
         test(`Validate ${data.testName}`, async ({ app }) => {
-            await app.main.open();
+            await app.main.expectLoaded();
             await app.main.completeFirstStep(data);
             await app.main.validateErrorMessage(
                 data.index,
@@ -17,7 +17,7 @@ test.describe('Fill form. Negative Tests @negative', () => {
     }
 
     test('Validate property type required error', async ({ app }) => {
-        await app.main.open();
+        await app.main.expectLoaded();
         await app.main.completeFirstStep(testData.propertyTypeRequired);
         await app.main.completeSecondStep(testData.propertyTypeRequired);
         await app.main.selectPropertyType(testData.propertyTypeRequired);
@@ -34,7 +34,7 @@ test.describe('Fill form. Negative Tests @negative', () => {
 
     for(const data of testData.user) {
         test(`Validate ${data.testName}`, async ({ app }) => {
-            await app.main.open();
+            await app.main.expectLoaded();
             await app.main.completeFirstStep(data);
             await app.main.completeSecondStep(data);
             await app.main.completeThirdStep(data);
@@ -53,7 +53,7 @@ test.describe('Fill form. Negative Tests @negative', () => {
     }
 
     test('Validate phone number error', async ({ app }) => {
-        await app.main.open();
+        await app.main.expectLoaded();
         await app.main.completeFirstStep(testData.wrongPhoneNumber);
         await app.main.completeSecondStep(testData.wrongPhoneNumber);
         await app.main.completeThirdStep(testData.wrongPhoneNumber);
@@ -72,7 +72,7 @@ test.describe('Fill form. Negative Tests @negative', () => {
 
     for(const data of testData.sorryEmail) {
         test(`Validate ${data.testName}`, async ({ app }) => {
-            await app.main.open();
+            await app.main.expectLoaded();
             await app.main.completeFirstStep(data);
             await app.main.fillSorryEmail(data);
             await app.main.submitStep(
