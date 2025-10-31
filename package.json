@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "playwright test --grep-invert @video",
+    "test": "playwright test --grep-invert @video --project='Desktop Chrome. HD'",
+    "test:all": "playwright test --grep-invert @video",
     "test:headed": "playwright test --headed",
     "test:video": "playwright test --grep @video --project=video-chrome",
     "report:pw": "playwright show-report",

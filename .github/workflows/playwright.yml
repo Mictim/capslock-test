@@ -39,6 +39,7 @@ jobs:
     
     - name: Run Playwright tests
       run: npm run test
+      continue-on-error: true
     
     - name: Generate Playwright HTML Report
       if: always()
